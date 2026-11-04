@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can your setup pay for the broker? — Bina Labs</title>
+<style>
+  :root{
+    --ink:#14161a; --paper:#f6f4ef; --card:#fff; --line:#d8d4cc;
+    --ok:#1f6f4b; --warn:#b4761a; --bad:#a3322b; --dim:#6b7280;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{padding:26px 22px 18px;border-bottom:1px solid var(--line)}
+  h1{margin:0 0 6px;font-size:22px;letter-spacing:-.01em}
+  .sub{color:var(--dim);font-size:14px;max-width:62ch}
+  main{max-width:900px;margin:0 auto;padding:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+        padding:18px;margin-bottom:18px}
+  label{display:block;font-size:13px;color:var(--dim);margin-bottom:4px}
+  input,select{font:inherit;padding:8px 10px;border:1px solid var(--line);
+               border-radius:6px;background:#fff;width:100%}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .result{margin-top:16px;padding:16px;border-radius:8px;border:1px solid var(--line)}
+  .verdict{font-size:20px;font-weight:600}
+  .ok{background:#eef6f1;border-color:#b8d8c5;color:var(--ok)}
+  .warn{background:#fbf4e8;border-color:#e3cfab;color:var(--warn)}
+  .bad{background:#f9eceb;border-color:#e2b9b4;color:var(--bad)}
+  .num{font-family:var(--mono);font-size:13px}
+  .math{font-family:var(--mono);font-size:12.5px;color:var(--dim);margin-top:10px;
+        line-height:1.7}
+  .bars{margin-top:12px}
+  .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+  .bar i{display:block;height:100%}
+  table{border-collapse:collapse;width:100%;font-size:13px;margin-top:10px}
+  th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left}
+  th{color:var(--dim);font-weight:600}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:24px}
+  .foot a{color:var(--ink)}
+  .tag{display:inline-block;padding:2px 8px;border-radius:99px;border:1px solid var(--line);
+       font-size:12px;color:var(--dim)}
+  button{font:inherit;padding:9px 14px;border-radius:6px;border:1px solid var(--ink);
+         background:var(--ink);color:#fff;cursor:pointer}
+  button.ghost{background:#fff;color:var(--ink)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Can your setup pay for the broker?</h1>
+  <p class="sub">Enter your spread, your slippage and your stop. The tool tells you
+  what fraction of your planned risk the broker takes before your strategy has
+  done anything at all. No signup, no email, nothing installed.</p>
+</header>
+
+<main>
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label for="spread">Round-trip spread (in price units)</label>
+        <input id="spread" type="number" step="any" value="0.20" aria-label="spread">
+      </div>
+      <div>
+        <label for="slip">Slippage per fill (price units)</label>
+        <input id="slip" type="number" step="any" value="0.02" aria-label="slippage">
+      </div>
+      <div>
+        <label for="stop">Planned stop distance (price units)</label>
+        <input id="stop" type="number" step="any" value="11.76" aria-label="stop distance">
+      </div>
+      <div>
+        <label for="atr">Typical ATR, optional (same units)</label>
+        <input id="atr" type="number" step="any" value="5.88" aria-label="ATR">
+      </div>
+    </div>
+    <div class="row">
+      <span class="tag">Same units for all four. On Exness: 1 point = 0.00001 for 5-digit FX, 0.001 for JPY pairs and gold.</span>
+      <button id="preset-gold">Gold XAUUSDm, H1</button>
+      <button id="preset-eur" class="ghost">EURUSDm, M15</button>
+      <button id="preset-scalp" class="ghost">EURUSDm, M5 scalp</button>
+      <button id="preset-nzd" class="ghost">NZDJPYm, M15</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin:0 0 8px;font-size:17px">The rule, and where it came from</h2>
+    <p style="margin:0 0 10px">A setup has to survive a round trip of
+      <span class="num">spread + 2 &times; slippage</span>. If that is more than
+      roughly 20% of the planned risk, the edge is being paid to the broker.</p>
+    <table>
+      <thead><tr><th>Cost as a share of risk</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td class="num">&lt; 0.15</td><td>Comfortable. Costs are a rounding error.</td></tr>
+        <tr><td class="num">0.15 &ndash; 0.27</td><td>Workable, but every pip of edge has to be real.</td></tr>
+        <tr><td class="num">&gt; 0.27</td><td>Break-even. The strategy must be right often enough to cover the haircut.</td></tr>
+        <tr><td class="num">&gt; 0.50</td><td>More than half the risk is gone before the trade closes.</td></tr>
+      </tbody>
+    </table>
+    <p class="foot" style="margin-top:12px">The 0.27 break-even comes from a linear
+      fit across seven symbol/timeframe combinations of one order-block strategy
+      (expectancy = 0.212 &minus; 0.773 &times; cost/risk, R&sup2; = 0.961, r = &minus;0.98).
+      Across twelve combinations the slope is steeper: 0.32 &minus; 1.44 &times; cost/risk,
+      R&sup2; = 0.64. The <em>direction</em> of the relationship is the robust part; the
+      exact coefficients are specific to that strategy and should not be treated as
+      a universal law.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin:0 0 8px;font-size:17px">Why we built this</h2>
+    <p style="margin:0">We tested 35 hypotheses on real Exness bars with real
+      spreads and real swap. Twenty-three died. Two came close and both failed for
+      the same reason: the trades looked independent but were not. The single most
+      common reason a strategy that looks good on paper loses money is not the
+      signal &mdash; it is that the stop is too small for the cost of trading it.</p>
+    <p style="margin:10px 0 0">If this tool says your setup is in trouble, that is
+      worth knowing before you buy the indicator. If it says your setup is fine,
+      the next question is whether the signal actually carries information. That is
+      what an audit answers.</p>
+    <div class="row">
+      <button onclick="window.location.href='mailto:audit@binalabs.co.ke'">Get an audit &mdash; KES 3,500</button>
+      <button class="ghost" onclick="window.location.href='mailto:audit@binalabs.co.ke'">Ask us to check one thing for free</button>
+    </div>
+  </div>
+
+  <p class="foot">Numbers measured on Exness raw-symbol feeds, 2021&ndash;2026.
+    Spread and swap vary by account type and by hour; check your own terminal before
+    you trust any number, including ours. Full method and every test:
+    <a href="mailto:audit@binalabs.co.ke?subject=request%20the%20test%20registry">request the test registry</a>.</p>
+  <p class="foot">This is a calculation of trading costs. It is not investment
+    advice, not a recommendation to trade or stop trading, and not a guarantee of
+    any outcome. A cost/risk ratio below the break-even line does not make a
+    strategy profitable; it only means the costs are not automatically fatal.</p>
+</main>
+
+<script>
+  const PRESETS = {
+    // Medians measured on Exness raw feeds in the lab data set (2021-2026).
+    // Slippage is the lab's standard 2 points per fill.
+    gold:  {spread: 0.200,   slip: 0.002,   stop: 11.759,  atr: 5.879},
+    eur:   {spread: 0.00008, slip: 0.00002, stop: 0.00117, atr: 0.000585},
+    scalp: {spread: 0.00008, slip: 0.00002, stop: 0.000319, atr: 0.000319},
+    nzd:   {spread: 0.043,   slip: 0.002,   stop: 0.149429, atr: 0.074714}
+  };
+
+  function band(r){
+    if (r < 0.15) return ["ok", "Comfortable", "Costs are a rounding error. If the signal is real, the arithmetic is on your side."];
+    if (r < 0.27) return ["warn", "Workable, with no margin", "Every pip of edge has to be real. There is no room for a signal that is only slightly right."];
+    if (r < 0.50) return ["bad", "The broker is taking a third of your risk", "The strategy has to be right substantially more often than chance just to break even."];
+    return ["bad", "This setup cannot work", "More than half the planned risk is consumed by the round trip. No signal survives that."];
+  }
+
+  function render(){
+    const spread = parseFloat(document.getElementById('spread').value);
+    const slip   = parseFloat(document.getElementById('slip').value);
+    const stop   = parseFloat(document.getElementById('stop').value);
+    const atr    = parseFloat(document.getElementById('atr').value);
+    const out = document.getElementById('result');
+    if (!(spread >= 0 && slip >= 0 && stop > 0)) {
+      out.className = 'result warn';
+      out.innerHTML = '<div class="verdict">Enter three numbers</div>' +
+        '<p class="num">Spread, slippage and stop must all be positive, in the same units.</p>';
+      return;
+    }
+    const roundTrip = spread + 2 * slip;
+    const ratio = roundTrip / stop;
+    const [cls, head, body] = band(ratio);
+    const minStop = roundTrip / 0.15;
+    let extra = '';
+    if (atr > 0) {
+      const atrs = stop / atr;
+      extra = 'your stop is ' + atrs.toFixed(2) + ' ATR' +
+              (atrs < 1 ? ' - a stop smaller than one ATR is a scalp, and scalps are where brokers eat strategies' : '') + '<br>';
+    }
+    out.className = 'result ' + cls;
+    out.innerHTML =
+      '<div class="verdict">' + head + '</div>' +
+      '<p>' + body + '</p>' +
+      '<div class="math">' +
+        'round trip = spread ' + spread + ' + 2 &times; slip ' + slip + ' = <b>' + roundTrip.toFixed(6) + '</b><br>' +
+        'cost / risk = ' + roundTrip.toFixed(6) + ' / ' + stop + ' = <b>' + ratio.toFixed(4) + '</b> (' + (ratio*100).toFixed(1) + '% of your stop)<br>' +
+        'you need ' + (1/ratio).toFixed(1) + ' round trips of this size to cover one full stop<br>' +
+        extra +
+        'to get costs under 15% of risk this stop would have to be at least <b>' + minStop.toFixed(6) + '</b>' +
+        (atr > 0 ? ' (' + (minStop/atr).toFixed(2) + ' ATR)' : '') + '<br>' +
+        'at the 27% break-even line this stop supports ' + Math.max(0, Math.floor(0.27 * stop / roundTrip)) + ' such trades' +
+      '</div>' +
+      '<div class="bars"><div class="bar"><i style="width:' + Math.min(100, ratio*100) + '%;background:currentColor"></i></div></div>';
+  }
+
+  document.getElementById('spread').addEventListener('input', render);
+  document.getElementById('slip').addEventListener('input', render);
+  document.getElementById('stop').addEventListener('input', render);
+  document.getElementById('atr').addEventListener('input', render);
+  ['gold','eur','scalp','nzd'].forEach(k => {
+    document.getElementById('preset-' + k).addEventListener('click', () => {
+      const p = PRESETS[k];
+      document.getElementById('spread').value = p.spread;
+      document.getElementById('slip').value = p.slip;
+      document.getElementById('stop').value = p.stop;
+      document.getElementById('atr').value = p.atr;
+      render();
+    });
+  });
+  render();
+</script>
+</body>
+</html>

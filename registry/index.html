@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test registry - Bina Labs</title>
+<style>
+:root{
+  --ink:#14161a; --paper:#f6f4ef; --card:#fff; --line:#d8d4cc;
+  --accent:#1d4e6b; --ok:#1f6f4b; --warn:#b4761a; --bad:#a3322b; --dim:#6b7280;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+     font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px 22px 18px;border-bottom:1px solid var(--line);
+       max-width:1000px;margin:0 auto}
+h1{margin:0 0 6px;font-size:24px;letter-spacing:-.01em}
+h2{margin:26px 0 10px;font-size:19px}
+h3{margin:18px 0 8px;font-size:16px}
+.sub{color:var(--dim);font-size:14px;max-width:66ch}
+main{max-width:1000px;margin:0 auto;padding:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+      padding:18px;margin-bottom:18px}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+nav a{color:var(--accent);text-decoration:none;font-size:14px}
+nav a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--accent);color:#fff}
+td.num{text-align:right;font-family:var(--mono)}
+code{font-family:var(--mono);font-size:13px;background:#eee8dd;
+     padding:2px 5px;border-radius:4px}
+pre{background:#eee8dd;border:1px solid var(--line);border-radius:8px;
+    padding:12px;font-family:var(--mono);font-size:13px;overflow:auto}
+.callout{border-left:4px solid var(--accent);background:#eef2f5;
+         padding:12px 14px;border-radius:6px;margin:12px 0}
+.callout-warn{border-left-color:var(--warn);background:#fbf4e8}
+.callout-bad{border-left-color:var(--bad);background:#f9eceb}
+.callout-info{border-left-color:var(--accent);background:#eef2f5}
+.badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:12px;
+       font-weight:600}
+.b-killed{background:#f9eceb;color:var(--bad)}
+.b-true{background:#eef6f1;color:var(--ok)}
+.b-bug{background:#fbf4e8;color:var(--warn)}
+.b-other{background:#eef2f5;color:var(--accent)}
+footer{max-width:1000px;margin:0 auto;padding:22px;color:var(--dim);
+       font-size:13px;border-top:1px solid var(--line)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Bina Labs</h1>
+  <p class="sub">Backtest integrity for MetaTrader systems. We publish the
+  failures, not just the wins.</p>
+  
+<nav>
+  <a href="../index.html">Home</a>
+  <a href="../cost-check/index.html">Cost calculator</a>
+  <a href="../registry/index.html">Test registry</a>
+  <a href="../audits/index.html">Audit dossiers</a>
+  <a href="../audit/index.html">EA audit service</a>
+</nav>
+</header>
+<main>
+<h2>The test registry</h2>
+<p class="sub">Every hypothesis this lab has tested, with the dataset, the script, the exact command to re-run it, the trade count, the random-direction baseline, the bootstrap confidence interval and the verdict. 39 hypotheses. 25 killed.</p>
+<div class="card">
+<p><strong>Two gates, fixed before the run:</strong></p>
+<ol>
+<li>Does the direction beat a coin-flip control <em>significantly</em> — CI excludes zero <em>and</em> the sign is positive?</li>
+<li>Is absolute expectancy positive after real spread, slippage and swap?</li>
+</ol>
+<p>Beating the control is not enough. Several hypotheses beat a coin flip and still lose money.</p>
+</div>
+<table>
+<tr><th>#</th><th>Hypothesis</th><th>Instrument</th><th>TF</th><th>Trades</th><th>R/trade</th><th>Control</th><th>95% CI</th><th>Verdict</th></tr>
+<tr><td class="num">1</td><td>Order block + fair value gap entry at the gap edge</td><td>FX 7 pairs</td><td>H4/W1</td><td class="num">246</td><td class="num">-0.126</td><td class="num"></td><td class="num"></td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">2</td><td>Stop false pop / liquidity sweep: bar pierces a swing extreme then closes back inside</td><td>FX 7 pairs</td><td>H4</td><td class="num">731</td><td class="num">-0.0056</td><td class="num"></td><td class="num">[-0.126, 0.115]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">3</td><td>Consolidation breakout: N-bar range < k*ATR then close outside it</td><td>FX 7 pairs</td><td>H4</td><td class="num">1997</td><td class="num">-0.06</td><td class="num"></td><td class="num">[-0.0234, 0.154]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">4</td><td>MACD crossover filtered by EMA200 trend, USDJPY</td><td>USDJPYm</td><td>H4</td><td class="num">217</td><td class="num"></td><td class="num"></td><td class="num">[1.02, 1.86]</td><td><span class="badge b-other">NOT SELLABLE</span></td></tr>
+<tr><td class="num">5</td><td>Asian-session range breakout at the London open</td><td>XAUUSDm</td><td>H1</td><td class="num">184</td><td class="num">-0.0189</td><td class="num">-0.0298</td><td class="num">[-0.2613, 0.1925]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">6</td><td>Certain UTC hours have a systematic directional drift on gold</td><td>XAUUSDm</td><td>H1</td><td class="num">29949</td><td class="num">-0.0271</td><td class="num">-0.0247</td><td class="num">[-0.014, 0.009]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">7</td><td>The 13:00 UTC NY-open bar's direction continues through the session</td><td>XAUUSDm</td><td>H1</td><td class="num">891</td><td class="num">0.0198</td><td class="num">-0.0222</td><td class="num">[-0.038, 0.126]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">8</td><td>HTF trend (SMA50 vs SMA200) plus LTF pullback to SMA20</td><td>XAUUSDm</td><td>H1</td><td class="num">2487</td><td class="num">-0.0346</td><td class="num">-0.0293</td><td class="num">[-0.057, 0.051]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">9</td><td>4-driver scorecard (DXY, silver, crude, S&P), 3-of-4 majority, 4h window</td><td>XAUUSDm</td><td>H1</td><td class="num">19413</td><td class="num">-0.0025</td><td class="num">-0.0166</td><td class="num">[0.001, 0.027]</td><td><span class="badge b-killed">KILLED AS A SYSTEM</span></td></tr>
+<tr><td class="num">10</td><td>4-driver scorecard, unanimous 4-0 only, 4h window</td><td>XAUUSDm</td><td>H1</td><td class="num">3510</td><td class="num">-0.0</td><td class="num">-0.0207</td><td class="num">[-0.01, 0.051]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">11</td><td>Same scorecard at a 24h window</td><td>XAUUSDm</td><td>H1</td><td class="num">22207</td><td class="num">-0.0814</td><td class="num">-0.06</td><td class="num">[-0.041, -0.002]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">12</td><td>7-driver scorecard: adds VIX, 10Y nominal yield, 10Y real yield, data surprises</td><td>XAUUSDm</td><td>H1</td><td class="num">25096</td><td class="num">-0.0052</td><td class="num"></td><td class="num">[-0.0137, 0.0035]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">13</td><td>Real (TIPS) 10Y yield change predicts gold's next-day direction</td><td>XAUUSDm</td><td>H1</td><td class="num">1265</td><td class="num">-0.009</td><td class="num"></td><td class="num">[-0.0234, 0.0087]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">14</td><td>US data surprises (actual vs forecast) move gold in the surprise direction</td><td>XAUUSDm</td><td>H1</td><td class="num">561</td><td class="num">0.5</td><td class="num">0.82</td><td class="num">[-0.96, 1.87]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">15</td><td>London fakeout: sweep beyond the Asian range then reverse back through it</td><td>XAUUSDm</td><td>H1</td><td class="num">582</td><td class="num">-0.071</td><td class="num">0.0104</td><td class="num">[-0.189, 0.039]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">16</td><td>Opening gap reverses during the following day</td><td>XAUUSDm</td><td>H1</td><td class="num">115</td><td class="num">-0.4008</td><td class="num">-0.0734</td><td class="num"></td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">17</td><td>Descriptive: lagged driver change correlates with gold's next move</td><td>XAUUSDm</td><td>H1</td><td class="num">30948</td><td class="num"></td><td class="num"></td><td class="num">[-0.0289, -0.0066]</td><td><span class="badge b-true">DATA FACT</span></td></tr>
+<tr><td class="num">18</td><td>Descriptive: VIX and Treasury yields vs gold's next-day move</td><td>XAUUSDm</td><td>D1</td><td class="num">1356</td><td class="num"></td><td class="num"></td><td class="num">[-0.168, -0.0622]</td><td><span class="badge b-true">DATA FACT</span></td></tr>
+<tr><td class="num">19</td><td>Gold's cost structure is friendlier than FX</td><td>XAUUSDm</td><td>H1/H4</td><td class="num">8480</td><td class="num"></td><td class="num">0.204</td><td class="num"></td><td><span class="badge b-true">TRUE</span></td></tr>
+<tr><td class="num">20</td><td>Exness charges gold longs to hold, and nothing for shorts</td><td>XAUUSDm</td><td>n/a</td><td class="num"></td><td class="num"></td><td class="num">-4.81</td><td class="num"></td><td><span class="badge b-true">TRUE</span></td></tr>
+<tr><td class="num">21</td><td>Spread-regime filter: only enter when spread is below its rolling median</td><td>XAUUSDm</td><td>H1</td><td class="num">29996</td><td class="num">-0.0149</td><td class="num">-0.0289</td><td class="num">[0.0011, 0.0277]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">22</td><td>Daily momentum: yesterday's direction predicts today's</td><td>XAUUSDm</td><td>H1</td><td class="num">1647</td><td class="num">-0.0528</td><td class="num">-0.0652</td><td class="num">[-0.0546, 0.08]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">23</td><td>Day-of-week drift: Thursday's positive bias is tradeable</td><td>XAUUSDm</td><td>H1</td><td class="num">1647</td><td class="num">-0.0907</td><td class="num">-0.0682</td><td class="num">[-0.077, 0.0346]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">24</td><td>Volatility compression precedes a profitable breakout</td><td>XAUUSDm</td><td>H1</td><td class="num">3653</td><td class="num">-0.1034</td><td class="num">-0.1249</td><td class="num">[-0.0228, 0.0675]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">25</td><td>Fade extreme non-commercial COT positioning (contrarian, |z| >= 2.0)</td><td>XAUUSDm</td><td>H1</td><td class="num">3050</td><td class="num">0.1451</td><td class="num">-0.0471</td><td class="num">[0.135, 0.2495]</td><td><span class="badge b-other">INCONCLUSIVE</span></td></tr>
+<tr><td class="num">26</td><td>The CFTC feed gives one clean GOLD series</td><td>n/a</td><td>weekly</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-bug">DATA BUG - FIXED</span></td></tr>
+<tr><td class="num">27</td><td>The COT edge survives the publication lag</td><td>XAUUSDm</td><td>H1</td><td class="num">497</td><td class="num">-0.1427</td><td class="num">-0.1725</td><td class="num"></td><td><span class="badge b-other">TESTED</span></td></tr>
+<tr><td class="num">28</td><td>COT positioning is predictive at any threshold</td><td>XAUUSDm</td><td>H1</td><td class="num">216</td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">29</td><td>Fair-value-gap fill probability is predictable from gap size, direction and age</td><td>XAUUSDm</td><td>H1</td><td class="num">6236</td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">30</td><td>Contrarian COT positioning works across FX, where the sample is 10x larger</td><td>AUD/CAD/CHF/EUR/GBP/JPY/MXN/NZD</td><td>H1</td><td class="num">31579</td><td class="num">0.0363</td><td class="num">-0.0728</td><td class="num">[0.0216, 0.0513]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">31</td><td>Broker swap rates can be fed straight into the cost model</td><td>all</td><td>n/a</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-bug">DATA BUG - FIXED</span></td></tr>
+<tr><td class="num">32</td><td>When an order block is cleanly breached, the breach direction continues</td><td>XAUUSDm</td><td>H1</td><td class="num">879</td><td class="num">-0.1553</td><td class="num">0.0101</td><td class="num">[-0.2674, -0.059]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">33</td><td>Gold mean-reverts to the Asian session mean during that session</td><td>XAUUSDm</td><td>H1</td><td class="num">2821</td><td class="num">-0.0483</td><td class="num">0.0037</td><td class="num">[-0.0971, -0.0109]</td><td><span class="badge b-killed">KILLED</span></td></tr>
+<tr><td class="num">34</td><td>Strategies already signed off in the lab are free of decision-level look-ahead</td><td>XAUUSDm</td><td>H1</td><td class="num">1464</td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-bug">BUG FOUND - FIXED</span></td></tr>
+<tr><td class="num">35</td><td>Resampling events fixes the unit-of-analysis problem</td><td>n/a</td><td>n/a</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-bug">BUG FOUND - FIXED</span></td></tr>
+<tr><td class="num">36</td><td>Every strategy in the lab registry passes the integrity battery</td><td>XAUUSDm, GBPUSDm, USDJPYm, EURUSDm</td><td>H1/M15</td><td class="num">8683</td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-true">TESTED - CLEAN</span></td></tr>
+<tr><td class="num">37</td><td>A client-facing audit dossier can be generated from the integrity battery without hand-writing any number</td><td>XAUUSDm (worked example), XAGUSDm (test fixture)</td><td>H1</td><td class="num">614</td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-other">TOOL BUILT</span></td></tr>
+<tr><td class="num">38</td><td>OB-FVG on GBPUSDm M15 picks the right direction</td><td>GBPUSDm</td><td>M15</td><td class="num">622</td><td class="num">-0.1536</td><td class="num">0.044</td><td class="num">[-0.3495, -0.0234]</td><td><span class="badge b-killed">KILLED - NEGATIVE EDGE</span></td></tr>
+<tr><td class="num">39</td><td>MT5 bar exports contain higher-timeframe bars for the period where the requested timeframe does not exist</td><td>XAUUSDm, EURUSDm, USDJPYm</td><td>H1/M15/M5</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td><span class="badge b-bug">DATA BUG - DETECTED</span></td></tr>
+</table>
+<h3>Verdict counts</h3><table><tr><th>Verdict</th><th>Count</th></tr>
+<tr><td><span class="badge b-killed">KILLED</span></td><td class="num">23</td></tr>
+<tr><td><span class="badge b-true">DATA FACT</span></td><td class="num">2</td></tr>
+<tr><td><span class="badge b-true">TRUE</span></td><td class="num">2</td></tr>
+<tr><td><span class="badge b-bug">DATA BUG - FIXED</span></td><td class="num">2</td></tr>
+<tr><td><span class="badge b-bug">BUG FOUND - FIXED</span></td><td class="num">2</td></tr>
+<tr><td><span class="badge b-other">NOT SELLABLE</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-killed">KILLED AS A SYSTEM</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-other">INCONCLUSIVE</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-other">TESTED</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-true">TESTED - CLEAN</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-other">TOOL BUILT</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-killed">KILLED - NEGATIVE EDGE</span></td><td class="num">1</td></tr>
+<tr><td><span class="badge b-bug">DATA BUG - DETECTED</span></td><td class="num">1</td></tr>
+</table>
+<p class="sub">Hypotheses that clear both gates on a per-trade basis: 2. Once the unit of analysis is corrected from trades to independent decisions: 0. Both survivors come from weekly COT reports - 27 independent reports for gold, 268 for FX - and the report-level confidence interval contains zero in both cases.</p>
+<h3>Reproduce every number</h3><pre>cd indicator-lab
+python docs/build_registry.py
+python tools/integrity_sweep.py --sample 40
+python -m pytest tests -q
+</pre>
+</main>
+<footer>
+  This is a statistical report on a piece of software. It is not investment advice, not a recommendation to trade or stop trading, and not a solicitation of any kind. Past performance, in-sample or out-of-sample, does not predict future results. Trading involves risk of loss.<br>
+  Contact: <a href="mailto:audit@binalabs.co.ke">audit@binalabs.co.ke</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EA audit service - Bina Labs</title>
+<style>
+:root{
+  --ink:#14161a; --paper:#f6f4ef; --card:#fff; --line:#d8d4cc;
+  --accent:#1d4e6b; --ok:#1f6f4b; --warn:#b4761a; --bad:#a3322b; --dim:#6b7280;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+     font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px 22px 18px;border-bottom:1px solid var(--line);
+       max-width:1000px;margin:0 auto}
+h1{margin:0 0 6px;font-size:24px;letter-spacing:-.01em}
+h2{margin:26px 0 10px;font-size:19px}
+h3{margin:18px 0 8px;font-size:16px}
+.sub{color:var(--dim);font-size:14px;max-width:66ch}
+main{max-width:1000px;margin:0 auto;padding:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+      padding:18px;margin-bottom:18px}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+nav a{color:var(--accent);text-decoration:none;font-size:14px}
+nav a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--accent);color:#fff}
+td.num{text-align:right;font-family:var(--mono)}
+code{font-family:var(--mono);font-size:13px;background:#eee8dd;
+     padding:2px 5px;border-radius:4px}
+pre{background:#eee8dd;border:1px solid var(--line);border-radius:8px;
+    padding:12px;font-family:var(--mono);font-size:13px;overflow:auto}
+.callout{border-left:4px solid var(--accent);background:#eef2f5;
+         padding:12px 14px;border-radius:6px;margin:12px 0}
+.callout-warn{border-left-color:var(--warn);background:#fbf4e8}
+.callout-bad{border-left-color:var(--bad);background:#f9eceb}
+.callout-info{border-left-color:var(--accent);background:#eef2f5}
+.badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:12px;
+       font-weight:600}
+.b-killed{background:#f9eceb;color:var(--bad)}
+.b-true{background:#eef6f1;color:var(--ok)}
+.b-bug{background:#fbf4e8;color:var(--warn)}
+.b-other{background:#eef2f5;color:var(--accent)}
+footer{max-width:1000px;margin:0 auto;padding:22px;color:var(--dim);
+       font-size:13px;border-top:1px solid var(--line)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Bina Labs</h1>
+  <p class="sub">Backtest integrity for MetaTrader systems. We publish the
+  failures, not just the wins.</p>
+  
+<nav>
+  <a href="../index.html">Home</a>
+  <a href="../cost-check/index.html">Cost calculator</a>
+  <a href="../registry/index.html">Test registry</a>
+  <a href="../audits/index.html">Audit dossiers</a>
+  <a href="../audit/index.html">EA audit service</a>
+</nav>
+</header>
+<main>
+
+<h2>EA audit service</h2>
+<p class="sub">You send the EA. We run it through the harness. You get a
+document with the verdict, the evidence, and the exact commands so you can
+re-run it yourself.</p>
+
+<div class="card">
+  <h3>What is in the dossier</h3>
+  <ol>
+    <li>Verdict in one line, with the confidence interval</li>
+    <li>Kill criteria, written down before the run</li>
+    <li>Walk-forward table - every run, not just the good one</li>
+    <li>Random-direction baseline - same trades, directions coin-flipped</li>
+    <li>Cost stress - same signals, spread doubled, one extra pip of slippage</li>
+    <li>Integrity audit - provenance, look-ahead, unit of analysis, swap units</li>
+    <li>Failure list - every parameter set that lost money</li>
+    <li>Reproducibility appendix - the exact commands</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h3>What we do not do</h3>
+  <ul>
+    <li>We do not "improve" the EA or re-tune it to turn a losing system into a winning one</li>
+    <li>We do not give trading advice</li>
+    <li>We do not take custody of your account</li>
+    <li>We do not sell you a replacement EA as a result of an audit</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Why the verdict is believable</h3>
+  <p>Sixteen bugs in our own testing infrastructure were found by the same
+  checks we run on your EA. Four of them changed a verdict. A session mean
+  computed over bars that had not happened yet moved a strategy from
+  +0.1497 R to -0.0483 R. A CFTC feed that merged three gold markets created
+  168 duplicate dates and a phantom edge. A swap quoted per lot consumed per
+  unit produced -616 R per trade. None of these raise an error.</p>
+  <p>The credential is not that we are good at finding bugs. It is that we
+  found them in our own code, published them, and fixed them.</p>
+</div>
+
+<h3>Intake</h3>
+<p>Send: the EA file (source strongly preferred), the exact parameter set you
+run, the broker and account type, the symbols and timeframes, the date range,
+and the tester model used. Spread and slippage decide whether an edge is real,
+so those are not optional.</p>
+<p><a href="mailto:audit@binalabs.co.ke">Request an audit</a></p>
+
+</main>
+<footer>
+  This is a statistical report on a piece of software. It is not investment advice, not a recommendation to trade or stop trading, and not a solicitation of any kind. Past performance, in-sample or out-of-sample, does not predict future results. Trading involves risk of loss.<br>
+  Contact: <a href="mailto:audit@binalabs.co.ke">audit@binalabs.co.ke</a>
+</footer>
+</body>
+</html>

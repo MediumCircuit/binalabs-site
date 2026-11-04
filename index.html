@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home - Bina Labs</title>
+<style>
+:root{
+  --ink:#14161a; --paper:#f6f4ef; --card:#fff; --line:#d8d4cc;
+  --accent:#1d4e6b; --ok:#1f6f4b; --warn:#b4761a; --bad:#a3322b; --dim:#6b7280;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+     font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px 22px 18px;border-bottom:1px solid var(--line);
+       max-width:1000px;margin:0 auto}
+h1{margin:0 0 6px;font-size:24px;letter-spacing:-.01em}
+h2{margin:26px 0 10px;font-size:19px}
+h3{margin:18px 0 8px;font-size:16px}
+.sub{color:var(--dim);font-size:14px;max-width:66ch}
+main{max-width:1000px;margin:0 auto;padding:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+      padding:18px;margin-bottom:18px}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+nav a{color:var(--accent);text-decoration:none;font-size:14px}
+nav a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--accent);color:#fff}
+td.num{text-align:right;font-family:var(--mono)}
+code{font-family:var(--mono);font-size:13px;background:#eee8dd;
+     padding:2px 5px;border-radius:4px}
+pre{background:#eee8dd;border:1px solid var(--line);border-radius:8px;
+    padding:12px;font-family:var(--mono);font-size:13px;overflow:auto}
+.callout{border-left:4px solid var(--accent);background:#eef2f5;
+         padding:12px 14px;border-radius:6px;margin:12px 0}
+.callout-warn{border-left-color:var(--warn);background:#fbf4e8}
+.callout-bad{border-left-color:var(--bad);background:#f9eceb}
+.callout-info{border-left-color:var(--accent);background:#eef2f5}
+.badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:12px;
+       font-weight:600}
+.b-killed{background:#f9eceb;color:var(--bad)}
+.b-true{background:#eef6f1;color:var(--ok)}
+.b-bug{background:#fbf4e8;color:var(--warn)}
+.b-other{background:#eef2f5;color:var(--accent)}
+footer{max-width:1000px;margin:0 auto;padding:22px;color:var(--dim);
+       font-size:13px;border-top:1px solid var(--line)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Bina Labs</h1>
+  <p class="sub">Backtest integrity for MetaTrader systems. We publish the
+  failures, not just the wins.</p>
+  
+<nav>
+  <a href="./index.html">Home</a>
+  <a href="./cost-check/index.html">Cost calculator</a>
+  <a href="./registry/index.html">Test registry</a>
+  <a href="./audits/index.html">Audit dossiers</a>
+  <a href="./audit/index.html">EA audit service</a>
+</nav>
+</header>
+<main>
+
+<h2>What this is</h2>
+<p class="sub">We test MetaTrader indicators and Expert Advisors against the
+broker's own data, with real spread, real slippage and real overnight swap, and
+we publish the result whether it is positive or negative.</p>
+
+<div class="card">
+  <h3>Start here</h3>
+  <p><strong><a href="cost-check/index.html">Can your setup pay for the broker?</strong></a>
+  Two minutes, no signup, works offline. Enter your spread, slippage and planned
+  stop and it tells you what fraction of your risk the broker takes before you
+  make a single decision.</p>
+  <p><strong><a href="registry/index.html">The test registry</strong></a> -
+  39 hypotheses, every one of them killed or inconclusive, with the data and
+  the command to re-run each one.</p>
+  <p><strong><a href="audits/index.html">Sample audit dossiers</strong></a> -
+  what you actually receive if you hire us.</p>
+  <p><strong><a href="audit/index.html">EA audit service</strong></a> - what we
+  do, what we do not do, and why the verdict is believable.</p>
+</div>
+
+<div class="card">
+  <h3>The four bug classes we look for</h3>
+  <ol>
+    <li><strong>Look-ahead</strong> - a statistic computed over a window that
+    includes bars after the entry. Detected by shifting every bar after the
+    signal bar and re-running the strategy. If the decision changes, the
+    strategy read data it could not have had.</li>
+    <li><strong>Data provenance</strong> - duplicate timestamps, merged markets,
+    gaps, and spreads that are constants pretending to be regimes.</li>
+    <li><strong>Unit of analysis</strong> - 31,579 trades from 268 weekly events
+    has an n of 268, not 31,579.</li>
+    <li><strong>Units</strong> - the broker quotes swap per lot; the cost model
+    consumes it per unit. A 100,000x error that runs without complaint.</li>
+  </ol>
+  <p>None of these raise an exception. The backtest runs, prints a number, and
+  the number is wrong.</p>
+</div>
+
+</main>
+<footer>
+  This is a statistical report on a piece of software. It is not investment advice, not a recommendation to trade or stop trading, and not a solicitation of any kind. Past performance, in-sample or out-of-sample, does not predict future results. Trading involves risk of loss.<br>
+  Contact: <a href="mailto:audit@binalabs.co.ke">audit@binalabs.co.ke</a>
+</footer>
+</body>
+</html>

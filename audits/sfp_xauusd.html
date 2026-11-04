@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sfp_xauusd - Bina Labs</title>
+<style>
+:root{
+  --ink:#14161a; --paper:#f6f4ef; --card:#fff; --line:#d8d4cc;
+  --accent:#1d4e6b; --ok:#1f6f4b; --warn:#b4761a; --bad:#a3322b; --dim:#6b7280;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+     font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px 22px 18px;border-bottom:1px solid var(--line);
+       max-width:1000px;margin:0 auto}
+h1{margin:0 0 6px;font-size:24px;letter-spacing:-.01em}
+h2{margin:26px 0 10px;font-size:19px}
+h3{margin:18px 0 8px;font-size:16px}
+.sub{color:var(--dim);font-size:14px;max-width:66ch}
+main{max-width:1000px;margin:0 auto;padding:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+      padding:18px;margin-bottom:18px}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+nav a{color:var(--accent);text-decoration:none;font-size:14px}
+nav a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--accent);color:#fff}
+td.num{text-align:right;font-family:var(--mono)}
+code{font-family:var(--mono);font-size:13px;background:#eee8dd;
+     padding:2px 5px;border-radius:4px}
+pre{background:#eee8dd;border:1px solid var(--line);border-radius:8px;
+    padding:12px;font-family:var(--mono);font-size:13px;overflow:auto}
+.callout{border-left:4px solid var(--accent);background:#eef2f5;
+         padding:12px 14px;border-radius:6px;margin:12px 0}
+.callout-warn{border-left-color:var(--warn);background:#fbf4e8}
+.callout-bad{border-left-color:var(--bad);background:#f9eceb}
+.callout-info{border-left-color:var(--accent);background:#eef2f5}
+.badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:12px;
+       font-weight:600}
+.b-killed{background:#f9eceb;color:var(--bad)}
+.b-true{background:#eef6f1;color:var(--ok)}
+.b-bug{background:#fbf4e8;color:var(--warn)}
+.b-other{background:#eef2f5;color:var(--accent)}
+footer{max-width:1000px;margin:0 auto;padding:22px;color:var(--dim);
+       font-size:13px;border-top:1px solid var(--line)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Bina Labs</h1>
+  <p class="sub">Backtest integrity for MetaTrader systems. We publish the
+  failures, not just the wins.</p>
+  
+<nav>
+  <a href="../index.html">Home</a>
+  <a href="../cost-check/index.html">Cost calculator</a>
+  <a href="../registry/index.html">Test registry</a>
+  <a href="../audits/index.html">Audit dossiers</a>
+  <a href="../audit/index.html">EA audit service</a>
+</nav>
+</header>
+<main>
+<h1>Audit: sfp on XAUUSDm H1</h1>
+<p><strong>Date:</strong> 2026-11-04<br />
+<strong>Auditor:</strong> Bina Labs<br />
+<strong>Verdict:</strong> <strong>NO EDGE</strong></p>
+<div class="callout callout-info">- CI [-0.2840, 0.1189] includes zero  <br>- edge -0.1473, CI [-0.2900, -0.0057] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip  <br>- expectancy -0.0877 R/trade after costs<br>3 of 5 kill criteria triggered.</div>
+<h2>Method</h2>
+<p>Walk-forward evaluation on 31336 bars of XAUUSDm H1 from the broker's own feed. Parameters are chosen on a fixed grid using only data that existed before each test window; only out-of-sample numbers are reported. Every signal is paired with a coin-flipped control that keeps the entry bar, the stop distance and the target distance identical, so the only thing that changes is direction. Costs are the real ones: per-bar spread from the feed, slippage on every fill, and overnight swap converted from per-lot to per-unit.</p>
+<h2>1. Verdict in one line</h2>
+<p>Out-of-sample expectancy <strong>-0.0877 R per trade</strong> (95% CI [-0.2840, 0.1189]) over 317 trades. No edge by the criteria below.</p>
+<h2>2. Kill criteria, written down before the run</h2>
+<p>A system is declared <strong>no edge</strong> if any of these hold. They are fixed in advance and are not negotiable after seeing the result.</p>
+<table>
+<thead>
+<tr>
+<th>criterion</th>
+<th>result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Out-of-sample expectancy 95% CI includes zero</td>
+<td><strong>TRIGGERED</strong> — CI [-0.2840, 0.1189] includes zero</td>
+</tr>
+<tr>
+<td>Random-direction baseline not beaten significantly</td>
+<td><strong>TRIGGERED</strong> — edge -0.1473, CI [-0.2900, -0.0057] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip</td>
+</tr>
+<tr>
+<td>Edge survives on one symbol only</td>
+<td>not testable in this audit - only one symbol was evaluated. A single-symbol result is a hypothesis until it is run on the rest of the tested set.</td>
+</tr>
+<tr>
+<td>Edge disappears under realistic spread + slippage</td>
+<td><strong>TRIGGERED</strong> — expectancy -0.0877 R/trade after costs</td>
+</tr>
+<tr>
+<td>Fewer than 100 out-of-sample trades</td>
+<td>clear — 317 out-of-sample trades</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Walk-forward results</h2>
+<table>
+<thead>
+<tr>
+<th>date</th>
+<th style="text-align:right">configs tried</th>
+<th style="text-align:right">OOS trades</th>
+<th style="text-align:right">expectancy R</th>
+<th>95% CI</th>
+<th style="text-align:right">win rate</th>
+<th style="text-align:right">PF</th>
+<th style="text-align:right">cost/risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-11-04</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">317</td>
+<td style="text-align:right">-0.0877</td>
+<td>[-0.2840, 0.1189]</td>
+<td style="text-align:right">0.230</td>
+<td style="text-align:right">0.886</td>
+<td style="text-align:right">0.011</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Random-direction baseline</h2>
+<p>The same signals, same entry bars, same stop <em>distance</em>, same target <em>distance</em>, direction mirrored. If the strategy does not beat this, the direction carries no information.</p>
+<p>Computed on the full-history run with the a-priori parameter set <code>{'range_bars': 10, 'min_pierce_atr': 0.25, 'buffer_atr': 0.5, 'min_rr': 1.0, 'atr_period': 14, 'cooldown': 6, 'max_hold': 96, 'slip_points': 2, 'comm': 0.0}</code> (1382 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:right">expectancy R/trade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>strategy</td>
+<td style="text-align:right">-0.1263</td>
+</tr>
+<tr>
+<td>coin-flip control (direction mirrored, same stops/targets)</td>
+<td style="text-align:right">0.0210</td>
+</tr>
+<tr>
+<td>control sd</td>
+<td style="text-align:right">1.5995</td>
+</tr>
+<tr>
+<td>edge</td>
+<td style="text-align:right">-0.1473</td>
+</tr>
+<tr>
+<td>95% CI of the edge</td>
+<td style="text-align:right">[-0.2900, -0.0057]</td>
+</tr>
+<tr>
+<td>bootstrap resamples where the edge is negative</td>
+<td style="text-align:right">98.0%</td>
+</tr>
+</tbody>
+</table>
+<p>The direction is <strong>significantly worse than random</strong>. Flipping every signal would beat this system by 0.1473 R per trade. That is a finding, not a fix: inverting a dead strategy is a new hypothesis, and the registry (row 32) shows what happens when you try it - the inverse of a dead strategy is not a live one.</p>
+<h2>5. Cost stress</h2>
+<p>The same signals, same stops, same targets, run against a spread twice as wide and one extra pip of slippage on every fill. A large share of &quot;edges&quot; die here, and a customer who cannot reproduce this table has not been given a real cost model.</p>
+<table>
+<thead>
+<tr>
+<th>configuration</th>
+<th style="text-align:right">expectancy R/trade</th>
+<th style="text-align:right">change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>as configured</td>
+<td style="text-align:right">-0.1263</td>
+<td style="text-align:right">—</td>
+</tr>
+<tr>
+<td>spread x2, +1 pip slippage</td>
+<td style="text-align:right">-0.1435</td>
+<td style="text-align:right">-0.0172</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Integrity audit</h2>
+<h3>6.1 Data provenance</h3>
+<table>
+<thead>
+<tr>
+<th>check</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bars</td>
+<td>31814</td>
+</tr>
+<tr>
+<td>duplicate timestamps</td>
+<td>0</td>
+</tr>
+<tr>
+<td>non-monotonic timestamps</td>
+<td>0</td>
+</tr>
+<tr>
+<td>gaps larger than one bar</td>
+<td>1852 (largest 74 bars)</td>
+</tr>
+<tr>
+<td>bars from a different timeframe</td>
+<td>478 (24x the requested bar size)</td>
+</tr>
+<tr>
+<td>invalid OHLC</td>
+<td>0</td>
+</tr>
+<tr>
+<td>zero-range bars</td>
+<td>0</td>
+</tr>
+<tr>
+<td>median spread</td>
+<td>0.200000</td>
+</tr>
+<tr>
+<td>spread is constant</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-info">478 of the 31814 rows in this file are not H1 bars at all - they are bars spaced 24x apart. MT5 silently returns higher-timeframe bars for the period where the requested timeframe does not exist. This lab trims them before running anything. An EA written by hand usually does not, and a strategy backtested on those rows is being evaluated on a timeframe it does not use.</div>
+<h3>6.2 Look-ahead</h3>
+<p>For each signal we shift every bar strictly after the signal bar by a constant offset, keeping OHLC shape intact. If the decision changes - the signal disappears, or flips direction - the strategy read data that did not exist yet.</p>
+<p><strong>CLEAN.</strong> 1382 signals in the series; the 25 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
+<h3>6.3 Unit of analysis</h3>
+<p>1382 trades came from 583 independent decisions (2.4 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
+<table>
+<thead>
+<tr>
+<th>estimand</th>
+<th style="text-align:right">value</th>
+<th>95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>per-trade, trades independent</td>
+<td style="text-align:right">-0.1263</td>
+<td>[-0.2083, -0.0441]</td>
+</tr>
+<tr>
+<td>per-trade, decisions resampled</td>
+<td style="text-align:right">-0.1263</td>
+<td>[-0.2077, -0.0449]</td>
+</tr>
+<tr>
+<td>mean per decision (other question)</td>
+<td style="text-align:right">-0.1247</td>
+<td>not used</td>
+</tr>
+</tbody>
+</table>
+<h3>6.4 Swap units</h3>
+<p>MT5 quotes swap <strong>per lot</strong>. The cost model consumes it <strong>per unit</strong>. Getting this wrong does not raise an error; it silently multiplies the carry by the contract size.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:right">per lot</th>
+<th style="text-align:right">per unit</th>
+<th style="text-align:right">contract size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>long</td>
+<td style="text-align:right">-471.0</td>
+<td style="text-align:right">-4.710000</td>
+<td style="text-align:right">100.0</td>
+</tr>
+<tr>
+<td>short</td>
+<td style="text-align:right">0.0</td>
+<td style="text-align:right">0.000000</td>
+<td style="text-align:right">100.0</td>
+</tr>
+</tbody>
+</table>
+<p>Carry as a fraction of price per night: 0.1193%</p>
+<p>The per-unit figure is plausible for this instrument.</p>
+<h2>7. Failures</h2>
+<p>Every parameter set we tried is recorded, including the ones that lost money. This is the part most vendors leave out, and it is the reason a negative verdict is believable.</p>
+<p>1 of 1 recorded runs on this strategy/symbol/timeframe had negative out-of-sample expectancy.</p>
+<table>
+<thead>
+<tr>
+<th>date</th>
+<th style="text-align:right">configs tried</th>
+<th style="text-align:right">OOS trades</th>
+<th style="text-align:right">expectancy R</th>
+<th>95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-11-04</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">317</td>
+<td style="text-align:right">-0.0877</td>
+<td>[-0.2840, 0.1189]</td>
+</tr>
+</tbody>
+</table>
+<h2>8. Reproducibility</h2>
+<pre><code class="language-bash">python tools/audit_report.py --strategy sfp --symbol XAUUSDm --tf H1 --sample 25 --cluster-gap 24 --out audits/sfp_xauusdm.md
+python -m lab.cli integrity --symbol XAUUSDm --tf H1 --strategy sfp --sample 25 --cluster-gap 24
+python -m lab.cli eval --strategy sfp --symbol XAUUSDm --tf H1
+</code></pre>
+<p>Data: <code>data/raw/XAUUSDm_H1.csv</code>. Parameters used: <code>{'range_bars': 10, 'min_pierce_atr': 0.25, 'buffer_atr': 0.5, 'min_rr': 1.0, 'atr_period': 14, 'cooldown': 6, 'max_hold': 96, 'slip_points': 2, 'comm': 0.0}</code>.</p>
+<h2>9. What this means for you</h2>
+<p>The difference between this system and a coin flip is not statistically distinguishable. Whatever the vendor's screenshot shows, on your broker's own data, with your costs, the direction this system picks is not better than chance.</p>
+<p>Two things follow. First, any profit you have seen from this system is explainable by luck, by the parameters chosen after the fact, or by a backtest that read the future. Second, the money is not in the signal; it is in the cost structure, and that is measurable.</p>
+<p>This report is a measurement of a claim. It is not investment advice, it is not a recommendation to trade or stop trading, and it does not tell you what to do with your account.</p>
+<h2>Disclaimer</h2>
+<p>This report is a statistical analysis of a software system. It is not investment advice, a recommendation to trade, or a guarantee of future performance. Past performance, in-sample or out-of-sample, does not predict future results. Trading involves risk of loss.</p>
+
+</main>
+<footer>
+  This is a statistical report on a piece of software. It is not investment advice, not a recommendation to trade or stop trading, and not a solicitation of any kind. Past performance, in-sample or out-of-sample, does not predict future results. Trading involves risk of loss.<br>
+  Contact: <a href="mailto:audit@binalabs.co.ke">audit@binalabs.co.ke</a>
+</footer>
+</body>
+</html>
