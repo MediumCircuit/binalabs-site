@@ -65,14 +65,15 @@ a{color:var(--accent)}
 </header>
 <main>
 <h1>Audit: demo_ema on EURUSDm H1</h1>
-<p><strong>Date:</strong> 2026-11-04<br />
+<p><strong>Date:</strong> 2026-11-05<br />
 <strong>Auditor:</strong> Bina Labs<br />
 <strong>Verdict:</strong> <strong>NO EDGE</strong></p>
-<div class="callout callout-info">- edge -0.0274, CI [-0.1223, 0.0717] includes zero - direction is indistinguishable from chance  <br>- expectancy -1.2529 R/trade after costs<br>2 of 5 kill criteria triggered.</div>
+<div class="callout callout-info">- edge -0.0240, CI [-0.1147, 0.0671] includes zero - direction is indistinguishable from chance  <br>- expectancy -0.0616 R/trade after costs<br>2 of 5 kill criteria triggered.</div>
 <h2>Method</h2>
 <p>Walk-forward evaluation on 32895 bars of EURUSDm H1 from the broker's own feed. Parameters are chosen on a fixed grid using only data that existed before each test window; only out-of-sample numbers are reported. Every signal is paired with a coin-flipped control that keeps the entry bar, the stop distance and the target distance identical, so the only thing that changes is direction. Costs are the real ones: per-bar spread from the feed, slippage on every fill, and overnight swap converted from per-lot to per-unit.</p>
 <h2>1. Verdict in one line</h2>
-<p>Out-of-sample expectancy <strong>-1.2529 R per trade</strong> (95% CI [-1.3367, -1.1654]) over 1265 trades. No edge by the criteria below.</p>
+<p>Out-of-sample expectancy <strong>-0.0616 R per trade</strong> (95% CI [-0.1180, -0.0059]) over 1712 trades. No edge by the criteria below.</p>
+<p>We headline the run matching the audited parameter set, not the best of the 2 recorded. The full spread of recorded out-of-sample expectancies is -1.2529 to -0.0616 R per trade.</p>
 <h2>2. Kill criteria, written down before the run</h2>
 <p>A system is declared <strong>no edge</strong> if any of these hold. They are fixed in advance and are not negotiable after seeing the result.</p>
 <table>
@@ -85,11 +86,11 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>Out-of-sample expectancy 95% CI includes zero</td>
-<td>clear — CI [-1.3367, -1.1654] excludes zero</td>
+<td>clear — CI [-0.1180, -0.0059] excludes zero</td>
 </tr>
 <tr>
 <td>Random-direction baseline not beaten significantly</td>
-<td><strong>TRIGGERED</strong> — edge -0.0274, CI [-0.1223, 0.0717] includes zero - direction is indistinguishable from chance</td>
+<td><strong>TRIGGERED</strong> — edge -0.0240, CI [-0.1147, 0.0671] includes zero - direction is indistinguishable from chance</td>
 </tr>
 <tr>
 <td>Edge survives on one symbol only</td>
@@ -97,11 +98,11 @@ a{color:var(--accent)}
 </tr>
 <tr>
 <td>Edge disappears under realistic spread + slippage</td>
-<td><strong>TRIGGERED</strong> — expectancy -1.2529 R/trade after costs</td>
+<td><strong>TRIGGERED</strong> — expectancy -0.0616 R/trade after costs</td>
 </tr>
 <tr>
 <td>Fewer than 100 out-of-sample trades</td>
-<td>clear — 1265 out-of-sample trades</td>
+<td>clear — 1712 out-of-sample trades</td>
 </tr>
 </tbody>
 </table>
@@ -121,6 +122,16 @@ a{color:var(--accent)}
 </thead>
 <tbody>
 <tr>
+<td>2026-11-05</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1712</td>
+<td style="text-align:right">-0.0616</td>
+<td>[-0.1180, -0.0059]</td>
+<td style="text-align:right">0.381</td>
+<td style="text-align:right">0.902</td>
+<td style="text-align:right">0.051</td>
+</tr>
+<tr>
 <td>2026-11-04</td>
 <td style="text-align:right">2</td>
 <td style="text-align:right">1265</td>
@@ -134,7 +145,7 @@ a{color:var(--accent)}
 </table>
 <h2>4. Random-direction baseline</h2>
 <p>The same signals, same entry bars, same stop <em>distance</em>, same target <em>distance</em>, direction mirrored. If the strategy does not beat this, the direction carries no information.</p>
-<p>Computed on the full-history run with the a-priori parameter set <code>{'ema_fast': 5, 'ema_slow': 20, 'atr_period': 14, 'sl_atr': 2.0, 'tp_atr': 3.0, 'min_rr': 1.0, 'max_hold': 288, 'slip': 0.002, 'comm': 0.0}</code> (2003 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
+<p>Computed on the full-history run with the a-priori parameter set <code>{'ema_fast': 5, 'ema_slow': 20, 'atr_period': 14, 'sl_atr': 2.0, 'tp_atr': 3.0, 'min_rr': 1.0, 'max_hold': 288, 'slip_points': 2, 'comm': 0.0}</code> (1998 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
 <table>
 <thead>
 <tr>
@@ -145,27 +156,27 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>strategy</td>
-<td style="text-align:right">-0.0535</td>
+<td style="text-align:right">-0.0697</td>
 </tr>
 <tr>
 <td>coin-flip control (direction mirrored, same stops/targets)</td>
-<td style="text-align:right">-0.0261</td>
+<td style="text-align:right">-0.0456</td>
 </tr>
 <tr>
 <td>control sd</td>
-<td style="text-align:right">1.2214</td>
+<td style="text-align:right">1.2153</td>
 </tr>
 <tr>
 <td>edge</td>
-<td style="text-align:right">-0.0274</td>
+<td style="text-align:right">-0.0240</td>
 </tr>
 <tr>
 <td>95% CI of the edge</td>
-<td style="text-align:right">[-0.1223, 0.0717]</td>
+<td style="text-align:right">[-0.1147, 0.0671]</td>
 </tr>
 <tr>
 <td>bootstrap resamples where the edge is negative</td>
-<td style="text-align:right">70.7%</td>
+<td style="text-align:right">68.8%</td>
 </tr>
 </tbody>
 </table>
@@ -183,13 +194,13 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>as configured</td>
-<td style="text-align:right">-0.0535</td>
+<td style="text-align:right">-0.0697</td>
 <td style="text-align:right">—</td>
 </tr>
 <tr>
 <td>spread x2, +1 pip slippage</td>
-<td style="text-align:right">-0.0892</td>
-<td style="text-align:right">-0.0357</td>
+<td style="text-align:right">-0.1154</td>
+<td style="text-align:right">-0.0458</td>
 </tr>
 </tbody>
 </table>
@@ -244,9 +255,9 @@ a{color:var(--accent)}
 <div class="callout callout-info">The spread is identical on every bar in this series. Any filter that claims to trade a spread regime is filtering noise, not a regime.<br>[!IMPORTANT]<br>480 of the 33375 rows in this file are not H1 bars at all - they are bars spaced 24x apart. MT5 silently returns higher-timeframe bars for the period where the requested timeframe does not exist. This lab trims them before running anything. An EA written by hand usually does not, and a strategy backtested on those rows is being evaluated on a timeframe it does not use.</div>
 <h3>6.2 Look-ahead</h3>
 <p>For each signal we shift every bar strictly after the signal bar by a constant offset, keeping OHLC shape intact. If the decision changes - the signal disappears, or flips direction - the strategy read data that did not exist yet.</p>
-<p><strong>CLEAN.</strong> 2004 signals in the series; the 25 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
+<p><strong>CLEAN.</strong> 2004 signals in the series; the 40 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
 <h3>6.3 Unit of analysis</h3>
-<p>2003 trades came from 583 independent decisions (3.4 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
+<p>1998 trades came from 582 independent decisions (3.4 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
 <table>
 <thead>
 <tr>
@@ -258,17 +269,17 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>per-trade, trades independent</td>
-<td style="text-align:right">-0.0535</td>
-<td>[-0.1042, 0.0012]</td>
+<td style="text-align:right">-0.0697</td>
+<td>[-0.1208, -0.0178]</td>
 </tr>
 <tr>
 <td>per-trade, decisions resampled</td>
-<td style="text-align:right">-0.0535</td>
-<td>[-0.1049, 0.0025]</td>
+<td style="text-align:right">-0.0697</td>
+<td>[-0.1222, -0.0156]</td>
 </tr>
 <tr>
 <td>mean per decision (other question)</td>
-<td style="text-align:right">0.2216</td>
+<td style="text-align:right">0.1997</td>
 <td>not used</td>
 </tr>
 </tbody>
@@ -287,8 +298,8 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>long</td>
-<td style="text-align:right">-5.8</td>
-<td style="text-align:right">-0.000058</td>
+<td style="text-align:right">-5.6</td>
+<td style="text-align:right">-0.000056</td>
 <td style="text-align:right">100000.0</td>
 </tr>
 <tr>
@@ -299,11 +310,16 @@ a{color:var(--accent)}
 </tr>
 </tbody>
 </table>
-<p>Carry as a fraction of price per night: 0.0052%</p>
+<p>Carry as a fraction of price per night: 0.0050%</p>
 <p>The per-unit figure is plausible for this instrument.</p>
+<h3>6.5 Simultaneous positions</h3>
+<p>The mirror held up to <strong>10 position(s) at once</strong> across the 1998 closed trades it booked. Every EA shipped from this lab has an <code>InpMaxOpen</code> input (OB_FVG_EA.mq5: 1), and the simulator now supports the same cap. A strategy that fires repeatedly while a position is open is not trading the account the terminal would have run on - it is trading a portfolio.</p>
+<p>This run was executed uncapped. If your EA has <code>InpMaxOpen</code> set (they all do), the peak above is the number you need to compare with it.</p>
+<p>Run again with <code>InpMaxOpen = 1</code> and the identical signal set: 996 trades instead of 1998 (1002 could never have been placed), expectancy -0.0838 R per trade instead of -0.0697 R. The confidence interval on 1998 trades is not a confidence interval on the 996 trades an account could actually hold.</p>
+<p>Signals generated: 2004. Trades actually closed: 1998. Orders that never filled: 0. Trades rejected because a position was already open: 0. The last two numbers are the difference between a strategy and a strategy that can be executed.</p>
 <h2>7. Failures</h2>
 <p>Every parameter set we tried is recorded, including the ones that lost money. This is the part most vendors leave out, and it is the reason a negative verdict is believable.</p>
-<p>1 of 1 recorded runs on this strategy/symbol/timeframe had negative out-of-sample expectancy.</p>
+<p>2 of 2 recorded runs on this strategy/symbol/timeframe had negative out-of-sample expectancy.</p>
 <table>
 <thead>
 <tr>
@@ -316,6 +332,13 @@ a{color:var(--accent)}
 </thead>
 <tbody>
 <tr>
+<td>2026-11-05</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1712</td>
+<td style="text-align:right">-0.0616</td>
+<td>[-0.1180, -0.0059]</td>
+</tr>
+<tr>
 <td>2026-11-04</td>
 <td style="text-align:right">2</td>
 <td style="text-align:right">1265</td>
@@ -325,11 +348,11 @@ a{color:var(--accent)}
 </tbody>
 </table>
 <h2>8. Reproducibility</h2>
-<pre><code class="language-bash">python tools/audit_report.py --strategy demo_ema --symbol EURUSDm --tf H1 --sample 25 --cluster-gap 24 --out audits/demo_ema_eurusdm.md
-python -m lab.cli integrity --symbol EURUSDm --tf H1 --strategy demo_ema --sample 25 --cluster-gap 24
+<pre><code class="language-bash">python tools/audit_report.py --strategy demo_ema --symbol EURUSDm --tf H1 --sample 40 --cluster-gap 24 --out audits/demo_ema_eurusdm.md
+python -m lab.cli integrity --symbol EURUSDm --tf H1 --strategy demo_ema --sample 40 --cluster-gap 24
 python -m lab.cli eval --strategy demo_ema --symbol EURUSDm --tf H1
 </code></pre>
-<p>Data: <code>data/raw/EURUSDm_H1.csv</code>. Parameters used: <code>{'ema_fast': 5, 'ema_slow': 20, 'atr_period': 14, 'sl_atr': 2.0, 'tp_atr': 3.0, 'min_rr': 1.0, 'max_hold': 288, 'slip': 0.002, 'comm': 0.0}</code>.</p>
+<p>Data: <code>data/raw/EURUSDm_H1.csv</code>. Parameters used: <code>{'ema_fast': 5, 'ema_slow': 20, 'atr_period': 14, 'sl_atr': 2.0, 'tp_atr': 3.0, 'min_rr': 1.0, 'max_hold': 288, 'slip_points': 2, 'comm': 0.0}</code>.</p>
 <h2>9. What this means for you</h2>
 <p>The difference between this system and a coin flip is not statistically distinguishable. Whatever the vendor's screenshot shows, on your broker's own data, with your costs, the direction this system picks is not better than chance.</p>
 <p>Two things follow. First, any profit you have seen from this system is explainable by luck, by the parameters chosen after the fact, or by a backtest that read the future. Second, the money is not in the signal; it is in the cost structure, and that is measurable.</p>

@@ -65,14 +65,14 @@ a{color:var(--accent)}
 </header>
 <main>
 <h1>Audit: sfp on XAUUSDm H1</h1>
-<p><strong>Date:</strong> 2026-11-04<br />
+<p><strong>Date:</strong> 2026-11-05<br />
 <strong>Auditor:</strong> Bina Labs<br />
 <strong>Verdict:</strong> <strong>NO EDGE</strong></p>
-<div class="callout callout-info">- CI [-0.2840, 0.1189] includes zero  <br>- edge -0.1473, CI [-0.2900, -0.0057] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip  <br>- expectancy -0.0877 R/trade after costs<br>3 of 5 kill criteria triggered.</div>
+<div class="callout callout-info">- CI [-0.3243, 0.0772] includes zero  <br>- edge -0.1567, CI [-0.2940, -0.0184] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip  <br>- expectancy -0.1352 R/trade after costs<br>3 of 5 kill criteria triggered.</div>
 <h2>Method</h2>
 <p>Walk-forward evaluation on 31336 bars of XAUUSDm H1 from the broker's own feed. Parameters are chosen on a fixed grid using only data that existed before each test window; only out-of-sample numbers are reported. Every signal is paired with a coin-flipped control that keeps the entry bar, the stop distance and the target distance identical, so the only thing that changes is direction. Costs are the real ones: per-bar spread from the feed, slippage on every fill, and overnight swap converted from per-lot to per-unit.</p>
 <h2>1. Verdict in one line</h2>
-<p>Out-of-sample expectancy <strong>-0.0877 R per trade</strong> (95% CI [-0.2840, 0.1189]) over 317 trades. No edge by the criteria below.</p>
+<p>Out-of-sample expectancy <strong>-0.1352 R per trade</strong> (95% CI [-0.3243, 0.0772]) over 314 trades. No edge by the criteria below.</p>
 <h2>2. Kill criteria, written down before the run</h2>
 <p>A system is declared <strong>no edge</strong> if any of these hold. They are fixed in advance and are not negotiable after seeing the result.</p>
 <table>
@@ -85,23 +85,23 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>Out-of-sample expectancy 95% CI includes zero</td>
-<td><strong>TRIGGERED</strong> — CI [-0.2840, 0.1189] includes zero</td>
+<td><strong>TRIGGERED</strong> — CI [-0.3243, 0.0772] includes zero</td>
 </tr>
 <tr>
 <td>Random-direction baseline not beaten significantly</td>
-<td><strong>TRIGGERED</strong> — edge -0.1473, CI [-0.2900, -0.0057] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip</td>
+<td><strong>TRIGGERED</strong> — edge -0.1567, CI [-0.2940, -0.0184] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip</td>
 </tr>
 <tr>
 <td>Edge survives on one symbol only</td>
-<td>not testable in this audit - only one symbol was evaluated. A single-symbol result is a hypothesis until it is run on the rest of the tested set.</td>
+<td>clear — median out-of-sample expectancy is positive on 2 of 7 other symbols (EURJPYm, USDJPYm)</td>
 </tr>
 <tr>
 <td>Edge disappears under realistic spread + slippage</td>
-<td><strong>TRIGGERED</strong> — expectancy -0.0877 R/trade after costs</td>
+<td><strong>TRIGGERED</strong> — expectancy -0.1352 R/trade after costs</td>
 </tr>
 <tr>
 <td>Fewer than 100 out-of-sample trades</td>
-<td>clear — 317 out-of-sample trades</td>
+<td>clear — 314 out-of-sample trades</td>
 </tr>
 </tbody>
 </table>
@@ -121,20 +121,20 @@ a{color:var(--accent)}
 </thead>
 <tbody>
 <tr>
-<td>2026-11-04</td>
+<td>2026-11-05</td>
 <td style="text-align:right">6</td>
-<td style="text-align:right">317</td>
-<td style="text-align:right">-0.0877</td>
-<td>[-0.2840, 0.1189]</td>
-<td style="text-align:right">0.230</td>
-<td style="text-align:right">0.886</td>
+<td style="text-align:right">314</td>
+<td style="text-align:right">-0.1352</td>
+<td>[-0.3243, 0.0772]</td>
+<td style="text-align:right">0.220</td>
+<td style="text-align:right">0.827</td>
 <td style="text-align:right">0.011</td>
 </tr>
 </tbody>
 </table>
 <h2>4. Random-direction baseline</h2>
 <p>The same signals, same entry bars, same stop <em>distance</em>, same target <em>distance</em>, direction mirrored. If the strategy does not beat this, the direction carries no information.</p>
-<p>Computed on the full-history run with the a-priori parameter set <code>{'range_bars': 10, 'min_pierce_atr': 0.25, 'buffer_atr': 0.5, 'min_rr': 1.0, 'atr_period': 14, 'cooldown': 6, 'max_hold': 96, 'slip_points': 2, 'comm': 0.0}</code> (1382 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
+<p>Computed on the full-history run with the a-priori parameter set <code>{'range_bars': 10, 'min_pierce_atr': 0.25, 'buffer_atr': 0.5, 'min_rr': 1.0, 'atr_period': 14, 'cooldown': 6, 'max_hold': 96, 'slip_points': 2, 'comm': 0.0}</code> (1376 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
 <table>
 <thead>
 <tr>
@@ -145,31 +145,31 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>strategy</td>
-<td style="text-align:right">-0.1263</td>
+<td style="text-align:right">-0.1768</td>
 </tr>
 <tr>
 <td>coin-flip control (direction mirrored, same stops/targets)</td>
-<td style="text-align:right">0.0210</td>
+<td style="text-align:right">-0.0201</td>
 </tr>
 <tr>
 <td>control sd</td>
-<td style="text-align:right">1.5995</td>
+<td style="text-align:right">1.6034</td>
 </tr>
 <tr>
 <td>edge</td>
-<td style="text-align:right">-0.1473</td>
+<td style="text-align:right">-0.1567</td>
 </tr>
 <tr>
 <td>95% CI of the edge</td>
-<td style="text-align:right">[-0.2900, -0.0057]</td>
+<td style="text-align:right">[-0.2940, -0.0184]</td>
 </tr>
 <tr>
 <td>bootstrap resamples where the edge is negative</td>
-<td style="text-align:right">98.0%</td>
+<td style="text-align:right">98.6%</td>
 </tr>
 </tbody>
 </table>
-<p>The direction is <strong>significantly worse than random</strong>. Flipping every signal would beat this system by 0.1473 R per trade. That is a finding, not a fix: inverting a dead strategy is a new hypothesis, and the registry (row 32) shows what happens when you try it - the inverse of a dead strategy is not a live one.</p>
+<p>The direction is <strong>significantly worse than random</strong>. Flipping every signal would beat this system by 0.1567 R per trade. That is a finding, not a fix: inverting a dead strategy is a new hypothesis, and the registry (row 32) shows what happens when you try it - the inverse of a dead strategy is not a live one.</p>
 <h2>5. Cost stress</h2>
 <p>The same signals, same stops, same targets, run against a spread twice as wide and one extra pip of slippage on every fill. A large share of &quot;edges&quot; die here, and a customer who cannot reproduce this table has not been given a real cost model.</p>
 <table>
@@ -183,13 +183,13 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>as configured</td>
-<td style="text-align:right">-0.1263</td>
+<td style="text-align:right">-0.1768</td>
 <td style="text-align:right">—</td>
 </tr>
 <tr>
 <td>spread x2, +1 pip slippage</td>
-<td style="text-align:right">-0.1435</td>
-<td style="text-align:right">-0.0172</td>
+<td style="text-align:right">-0.2079</td>
+<td style="text-align:right">-0.0311</td>
 </tr>
 </tbody>
 </table>
@@ -244,9 +244,9 @@ a{color:var(--accent)}
 <div class="callout callout-info">478 of the 31814 rows in this file are not H1 bars at all - they are bars spaced 24x apart. MT5 silently returns higher-timeframe bars for the period where the requested timeframe does not exist. This lab trims them before running anything. An EA written by hand usually does not, and a strategy backtested on those rows is being evaluated on a timeframe it does not use.</div>
 <h3>6.2 Look-ahead</h3>
 <p>For each signal we shift every bar strictly after the signal bar by a constant offset, keeping OHLC shape intact. If the decision changes - the signal disappears, or flips direction - the strategy read data that did not exist yet.</p>
-<p><strong>CLEAN.</strong> 1382 signals in the series; the 25 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
+<p><strong>CLEAN.</strong> 1382 signals in the series; the 40 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
 <h3>6.3 Unit of analysis</h3>
-<p>1382 trades came from 583 independent decisions (2.4 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
+<p>1376 trades came from 580 independent decisions (2.4 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
 <table>
 <thead>
 <tr>
@@ -258,17 +258,17 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>per-trade, trades independent</td>
-<td style="text-align:right">-0.1263</td>
-<td>[-0.2083, -0.0441]</td>
+<td style="text-align:right">-0.1768</td>
+<td>[-0.2583, -0.1015]</td>
 </tr>
 <tr>
 <td>per-trade, decisions resampled</td>
-<td style="text-align:right">-0.1263</td>
-<td>[-0.2077, -0.0449]</td>
+<td style="text-align:right">-0.1768</td>
+<td>[-0.2543, -0.0973]</td>
 </tr>
 <tr>
 <td>mean per decision (other question)</td>
-<td style="text-align:right">-0.1247</td>
+<td style="text-align:right">-0.1895</td>
 <td>not used</td>
 </tr>
 </tbody>
@@ -287,8 +287,8 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>long</td>
-<td style="text-align:right">-471.0</td>
-<td style="text-align:right">-4.710000</td>
+<td style="text-align:right">-630.6</td>
+<td style="text-align:right">-6.306000</td>
 <td style="text-align:right">100.0</td>
 </tr>
 <tr>
@@ -299,8 +299,12 @@ a{color:var(--accent)}
 </tr>
 </tbody>
 </table>
-<p>Carry as a fraction of price per night: 0.1193%</p>
+<p>Carry as a fraction of price per night: 0.1597%</p>
 <p>The per-unit figure is plausible for this instrument.</p>
+<h3>6.5 Simultaneous positions</h3>
+<p>The mirror held up to <strong>4 position(s) at once</strong> across the 1376 closed trades it booked. Every EA shipped from this lab has an <code>InpMaxOpen</code> input (OB_FVG_EA.mq5: 1), and the simulator now supports the same cap. A strategy that fires repeatedly while a position is open is not trading the account the terminal would have run on - it is trading a portfolio.</p>
+<p>Run again with <code>InpMaxOpen = 1</code> and the identical signal set: 1131 trades instead of 1376 (245 could never have been placed), expectancy -0.1788 R per trade instead of -0.1768 R. The confidence interval on 1376 trades is not a confidence interval on the 1131 trades an account could actually hold.</p>
+<p>Signals generated: 1382. Trades actually closed: 1376. Orders that never filled: 0. Trades rejected because a position was already open: 0. The last two numbers are the difference between a strategy and a strategy that can be executed.</p>
 <h2>7. Failures</h2>
 <p>Every parameter set we tried is recorded, including the ones that lost money. This is the part most vendors leave out, and it is the reason a negative verdict is believable.</p>
 <p>1 of 1 recorded runs on this strategy/symbol/timeframe had negative out-of-sample expectancy.</p>
@@ -316,17 +320,17 @@ a{color:var(--accent)}
 </thead>
 <tbody>
 <tr>
-<td>2026-11-04</td>
+<td>2026-11-05</td>
 <td style="text-align:right">6</td>
-<td style="text-align:right">317</td>
-<td style="text-align:right">-0.0877</td>
-<td>[-0.2840, 0.1189]</td>
+<td style="text-align:right">314</td>
+<td style="text-align:right">-0.1352</td>
+<td>[-0.3243, 0.0772]</td>
 </tr>
 </tbody>
 </table>
 <h2>8. Reproducibility</h2>
-<pre><code class="language-bash">python tools/audit_report.py --strategy sfp --symbol XAUUSDm --tf H1 --sample 25 --cluster-gap 24 --out audits/sfp_xauusdm.md
-python -m lab.cli integrity --symbol XAUUSDm --tf H1 --strategy sfp --sample 25 --cluster-gap 24
+<pre><code class="language-bash">python tools/audit_report.py --strategy sfp --symbol XAUUSDm --tf H1 --sample 40 --cluster-gap 24 --out audits/sfp_xauusdm.md
+python -m lab.cli integrity --symbol XAUUSDm --tf H1 --strategy sfp --sample 40 --cluster-gap 24
 python -m lab.cli eval --strategy sfp --symbol XAUUSDm --tf H1
 </code></pre>
 <p>Data: <code>data/raw/XAUUSDm_H1.csv</code>. Parameters used: <code>{'range_bars': 10, 'min_pierce_atr': 0.25, 'buffer_atr': 0.5, 'min_rr': 1.0, 'atr_period': 14, 'cooldown': 6, 'max_hold': 96, 'slip_points': 2, 'comm': 0.0}</code>.</p>

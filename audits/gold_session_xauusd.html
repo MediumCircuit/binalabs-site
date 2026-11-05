@@ -314,6 +314,7 @@ a{color:var(--accent)}
 <p>The per-unit figure is plausible for this instrument.</p>
 <h3>6.5 Simultaneous positions</h3>
 <p>The mirror held up to <strong>1 position(s) at once</strong> across the 183 closed trades it booked. Every EA shipped from this lab has an <code>InpMaxOpen</code> input (OB_FVG_EA.mq5: 1), and the simulator now supports the same cap. A strategy that fires repeatedly while a position is open is not trading the account the terminal would have run on - it is trading a portfolio.</p>
+<p>Run again with <code>InpMaxOpen = 1</code> and the identical signal set: 183 trades instead of 183 (0 could never have been placed), expectancy -0.0041 R per trade instead of -0.0041 R. The confidence interval on 183 trades is not a confidence interval on the 183 trades an account could actually hold.</p>
 <p>Signals generated: 184. Trades actually closed: 183. Orders that never filled: 0. Trades rejected because a position was already open: 0. The last two numbers are the difference between a strategy and a strategy that can be executed.</p>
 <h2>7. Failures</h2>
 <p>Every parameter set we tried is recorded, including the ones that lost money. This is the part most vendors leave out, and it is the reason a negative verdict is believable.</p>
