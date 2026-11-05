@@ -77,7 +77,7 @@ we publish the result whether it is positive or negative.</p>
   stop and it tells you what fraction of your risk the broker takes before you
   make a single decision.</p>
   <p><strong><a href="registry/index.html">The test registry</strong></a> -
-  39 hypotheses, every one of them killed or inconclusive, with the data and
+  48 hypotheses, every one of them killed or inconclusive, with the data and
   the command to re-run each one.</p>
   <p><strong><a href="audits/index.html">Sample audit dossiers</strong></a> -
   what you actually receive if you hire us.</p>
@@ -86,7 +86,7 @@ we publish the result whether it is positive or negative.</p>
 </div>
 
 <div class="card">
-  <h3>The four bug classes we look for</h3>
+  <h3>The six bug classes we look for</h3>
   <ol>
     <li><strong>Look-ahead</strong> - a statistic computed over a window that
     includes bars after the entry. Detected by shifting every bar after the
@@ -98,6 +98,15 @@ we publish the result whether it is positive or negative.</p>
     has an n of 268, not 31,579.</li>
     <li><strong>Units</strong> - the broker quotes swap per lot; the cost model
     consumes it per unit. A 100,000x error that runs without complaint.</li>
+    <li><strong>The fill model</strong> - who pays the spread and when. We found
+    our own simulator charging the spread twice on a long entry and not at all on
+    a short exit. In the pre-fix model an identical long and short paid different
+    amounts on the same bars, which means the random-direction control every
+    "beats the baseline" claim depends on was not a control at all.</li>
+    <li><strong>Position count</strong> - a mirror with no cap on simultaneous
+    positions is testing a portfolio, not an account. Every EA we ship has an
+    <code>InpMaxOpen</code> input; the simulator now has the same parameter, and
+    every dossier reports the peak number of positions open at once.</li>
   </ol>
   <p>None of these raise an exception. The backtest runs, prints a number, and
   the number is wrong.</p>

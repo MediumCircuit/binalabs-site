@@ -65,14 +65,15 @@ a{color:var(--accent)}
 </header>
 <main>
 <h1>Audit: obfvg on GBPUSDm M15</h1>
-<p><strong>Date:</strong> 2026-11-04<br />
+<p><strong>Date:</strong> 2026-11-05<br />
 <strong>Auditor:</strong> Bina Labs<br />
 <strong>Verdict:</strong> <strong>NO EDGE</strong></p>
-<div class="callout callout-info">- CI [-0.0461, 0.1791] includes zero  <br>- edge -0.1976, CI [-0.3495, -0.0234] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip<br>2 of 5 kill criteria triggered.</div>
+<div class="callout callout-info">- CI [-0.0461, 0.1791] includes zero  <br>- edge -0.1436, CI [-0.2846, 0.0316] includes zero - direction is indistinguishable from chance<br>2 of 5 kill criteria triggered.</div>
 <h2>Method</h2>
 <p>Walk-forward evaluation on 131228 bars of GBPUSDm M15 from the broker's own feed. Parameters are chosen on a fixed grid using only data that existed before each test window; only out-of-sample numbers are reported. Every signal is paired with a coin-flipped control that keeps the entry bar, the stop distance and the target distance identical, so the only thing that changes is direction. Costs are the real ones: per-bar spread from the feed, slippage on every fill, and overnight swap converted from per-lot to per-unit.</p>
 <h2>1. Verdict in one line</h2>
 <p>Out-of-sample expectancy <strong>0.0701 R per trade</strong> (95% CI [-0.0461, 0.1791]) over 538 trades. No edge by the criteria below.</p>
+<p>We headline the run matching the audited parameter set, not the best of the 2 recorded. The full spread of recorded out-of-sample expectancies is -0.0794 to 0.0701 R per trade.</p>
 <h2>2. Kill criteria, written down before the run</h2>
 <p>A system is declared <strong>no edge</strong> if any of these hold. They are fixed in advance and are not negotiable after seeing the result.</p>
 <table>
@@ -89,11 +90,11 @@ a{color:var(--accent)}
 </tr>
 <tr>
 <td>Random-direction baseline not beaten significantly</td>
-<td><strong>TRIGGERED</strong> — edge -0.1976, CI [-0.3495, -0.0234] excludes zero and is NEGATIVE - the system is significantly worse than a coin flip</td>
+<td><strong>TRIGGERED</strong> — edge -0.1436, CI [-0.2846, 0.0316] includes zero - direction is indistinguishable from chance</td>
 </tr>
 <tr>
 <td>Edge survives on one symbol only</td>
-<td>not testable in this audit - only one symbol was evaluated. A single-symbol result is a hypothesis until it is run on the rest of the tested set.</td>
+<td>clear — median out-of-sample expectancy is positive on 6 of 6 other symbols (AUDJPYm, EURJPYm, EURUSDm, GBPJPYm, NZDJPYm, USDJPYm)</td>
 </tr>
 <tr>
 <td>Edge disappears under realistic spread + slippage</td>
@@ -121,6 +122,16 @@ a{color:var(--accent)}
 </thead>
 <tbody>
 <tr>
+<td>2026-11-05</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">361</td>
+<td style="text-align:right">-0.0794</td>
+<td>[-0.2016, 0.0296]</td>
+<td style="text-align:right">0.374</td>
+<td style="text-align:right">0.868</td>
+<td style="text-align:right">0.065</td>
+</tr>
+<tr>
 <td>2026-10-23</td>
 <td style="text-align:right">2</td>
 <td style="text-align:right">538</td>
@@ -134,7 +145,7 @@ a{color:var(--accent)}
 </table>
 <h2>4. Random-direction baseline</h2>
 <p>The same signals, same entry bars, same stop <em>distance</em>, same target <em>distance</em>, direction mirrored. If the strategy does not beat this, the direction carries no information.</p>
-<p>Computed on the full-history run with the a-priori parameter set <code>{'imp_tf': 'M15', 'htf_tf': 'H4', 'min_risk_spread': 0.0, 'tf': 'M15', 'point': 1e-05}</code> (622 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
+<p>Computed on the full-history run with the a-priori parameter set <code>{'imp_tf': 'M15', 'htf_tf': 'H4', 'min_risk_spread': 0.0, 'tf': 'M15', 'point': 1e-05}</code> (620 trades), not on the walk-forward out-of-sample trades. The two numbers are deliberately separate: the walk-forward answers &quot;does it generalise&quot;, this answers &quot;is the direction real at all&quot;.</p>
 <table>
 <thead>
 <tr>
@@ -145,31 +156,31 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>strategy</td>
-<td style="text-align:right">-0.1536</td>
+<td style="text-align:right">-0.1591</td>
 </tr>
 <tr>
 <td>coin-flip control (direction mirrored, same stops/targets)</td>
-<td style="text-align:right">0.0440</td>
+<td style="text-align:right">-0.0155</td>
 </tr>
 <tr>
 <td>control sd</td>
-<td style="text-align:right">1.1621</td>
+<td style="text-align:right">1.1403</td>
 </tr>
 <tr>
 <td>edge</td>
-<td style="text-align:right">-0.1976</td>
+<td style="text-align:right">-0.1436</td>
 </tr>
 <tr>
 <td>95% CI of the edge</td>
-<td style="text-align:right">[-0.3495, -0.0234]</td>
+<td style="text-align:right">[-0.2846, 0.0316]</td>
 </tr>
 <tr>
 <td>bootstrap resamples where the edge is negative</td>
-<td style="text-align:right">98.8%</td>
+<td style="text-align:right">93.7%</td>
 </tr>
 </tbody>
 </table>
-<p>The direction is <strong>significantly worse than random</strong>. Flipping every signal would beat this system by 0.1976 R per trade. That is a finding, not a fix: inverting a dead strategy is a new hypothesis, and the registry (row 32) shows what happens when you try it - the inverse of a dead strategy is not a live one.</p>
+<p>The edge CI contains zero. The direction is noise.</p>
 <h2>5. Cost stress</h2>
 <p>The same signals, same stops, same targets, run against a spread twice as wide and one extra pip of slippage on every fill. A large share of &quot;edges&quot; die here, and a customer who cannot reproduce this table has not been given a real cost model.</p>
 <table>
@@ -183,13 +194,13 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>as configured</td>
-<td style="text-align:right">-0.1536</td>
+<td style="text-align:right">-0.1591</td>
 <td style="text-align:right">—</td>
 </tr>
 <tr>
 <td>spread x2, +1 pip slippage</td>
-<td style="text-align:right">-0.2276</td>
-<td style="text-align:right">-0.0740</td>
+<td style="text-align:right">-0.2373</td>
+<td style="text-align:right">-0.0782</td>
 </tr>
 </tbody>
 </table>
@@ -239,9 +250,9 @@ a{color:var(--accent)}
 </table>
 <h3>6.2 Look-ahead</h3>
 <p>For each signal we shift every bar strictly after the signal bar by a constant offset, keeping OHLC shape intact. If the decision changes - the signal disappears, or flips direction - the strategy read data that did not exist yet.</p>
-<p><strong>CLEAN.</strong> 654 signals in the series; the 25 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
+<p><strong>CLEAN.</strong> 654 signals in the series; the 40 sampled were re-evaluated after shifting every bar up to 12 bars after their signal bar, with no change in existence or direction.</p>
 <h3>6.3 Unit of analysis</h3>
-<p>622 trades came from 568 independent decisions (1.1 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
+<p>620 trades came from 566 independent decisions (1.1 trades per decision). Counting trades as observations inflates the sample size and narrows the confidence interval artificially.</p>
 <table>
 <thead>
 <tr>
@@ -253,17 +264,17 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>per-trade, trades independent</td>
-<td style="text-align:right">-0.1536</td>
-<td>[-0.2498, -0.0514]</td>
+<td style="text-align:right">-0.1591</td>
+<td>[-0.2509, -0.0645]</td>
 </tr>
 <tr>
 <td>per-trade, decisions resampled</td>
-<td style="text-align:right">-0.1536</td>
-<td>[-0.2480, -0.0494]</td>
+<td style="text-align:right">-0.1591</td>
+<td>[-0.2515, -0.0569]</td>
 </tr>
 <tr>
 <td>mean per decision (other question)</td>
-<td style="text-align:right">-0.1426</td>
+<td style="text-align:right">-0.1494</td>
 <td>not used</td>
 </tr>
 </tbody>
@@ -282,26 +293,49 @@ a{color:var(--accent)}
 <tbody>
 <tr>
 <td>long</td>
-<td style="text-align:right">-1.5</td>
-<td style="text-align:right">-0.000015</td>
+<td style="text-align:right">-1.3</td>
+<td style="text-align:right">-0.000013</td>
 <td style="text-align:right">100000.0</td>
 </tr>
 <tr>
 <td>short</td>
-<td style="text-align:right">-1.1</td>
-<td style="text-align:right">-0.000011</td>
+<td style="text-align:right">-1.4</td>
+<td style="text-align:right">-0.000014</td>
 <td style="text-align:right">100000.0</td>
 </tr>
 </tbody>
 </table>
-<p>Carry as a fraction of price per night: 0.0011%</p>
-<p>The per-unit figure is plausible for this instrument.</p>
+<p>Carry as a fraction of price per night: 0.0010%</p>
+<div class="callout callout-info">short carry exceeds long carry - check sign convention</div>
+<h3>6.5 Simultaneous positions</h3>
+<p>The mirror held up to <strong>2 position(s) at once</strong> across the 620 closed trades it booked. Every EA shipped from this lab has an <code>InpMaxOpen</code> input (OB_FVG_EA.mq5: 1), and the simulator now supports the same cap. A strategy that fires repeatedly while a position is open is not trading the account the terminal would have run on - it is trading a portfolio.</p>
+<p>Signals generated: 654. Trades actually closed: 620. Orders that never filled: 0. Trades rejected because a position was already open: 0. The last two numbers are the difference between a strategy and a strategy that can be executed.</p>
 <h2>7. Failures</h2>
 <p>Every parameter set we tried is recorded, including the ones that lost money. This is the part most vendors leave out, and it is the reason a negative verdict is believable.</p>
-<p>0 of 1 recorded runs on this strategy/symbol/timeframe had negative out-of-sample expectancy.</p>
+<p>1 of 2 recorded runs on this strategy/symbol/timeframe had negative out-of-sample expectancy.</p>
+<table>
+<thead>
+<tr>
+<th>date</th>
+<th style="text-align:right">configs tried</th>
+<th style="text-align:right">OOS trades</th>
+<th style="text-align:right">expectancy R</th>
+<th>95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-11-05</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">361</td>
+<td style="text-align:right">-0.0794</td>
+<td>[-0.2016, 0.0296]</td>
+</tr>
+</tbody>
+</table>
 <h2>8. Reproducibility</h2>
-<pre><code class="language-bash">python tools/audit_report.py --strategy obfvg --symbol GBPUSDm --tf M15 --sample 25 --cluster-gap 24 --out audits/obfvg_gbpusdm.md
-python -m lab.cli integrity --symbol GBPUSDm --tf M15 --strategy obfvg --sample 25 --cluster-gap 24
+<pre><code class="language-bash">python tools/audit_report.py --strategy obfvg --symbol GBPUSDm --tf M15 --sample 40 --cluster-gap 24 --out audits/obfvg_gbpusdm.md
+python -m lab.cli integrity --symbol GBPUSDm --tf M15 --strategy obfvg --sample 40 --cluster-gap 24
 python -m lab.cli eval --strategy obfvg --symbol GBPUSDm --tf M15
 </code></pre>
 <p>Data: <code>data/raw/GBPUSDm_M15.csv</code>. Parameters used: <code>{'imp_tf': 'M15', 'htf_tf': 'H4', 'min_risk_spread': 0.0, 'tf': 'M15', 'point': 1e-05}</code>.</p>
